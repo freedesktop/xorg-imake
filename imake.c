@@ -1450,6 +1450,21 @@ define_os_defaults(FILE *inFile)
 	  name = &uts_name;
       }
 #endif
+# ifdef __FreeBSD__
+       /* Override for compiling in chroot of other OS version, such as
+        * in the bento build cluster.
+        */
+       {
+	 char *e;
+	 if ((e = getenv("OSREL")) != NULL && 
+	     strlen(name->sysname) + strlen(e) + 1 < SYS_NMLN) {
+	  strcpy(name->release, e);
+	  strcpy(name->version, name->sysname);
+	  strcat(name->version, " ");
+	  strcat(name->version, e);
+	 }
+       }
+# endif
 
 #  if defined DEFAULT_OS_NAME
 #   if defined CROSSCOMPILE
