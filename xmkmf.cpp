@@ -1,6 +1,6 @@
 XCOMM!/bin/sh
 
-XCOMM $XFree86$
+XCOMM $XFree86: xc/config/util/xmkmf.cpp,v 1.4 2001/01/17 16:39:02 dawes Exp $
 XCOMM
 XCOMM make a Makefile from an Imakefile from inside or outside the sources
 XCOMM 

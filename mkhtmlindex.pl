@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $XFree86$
+# $XFree86: xc/config/util/mkhtmlindex.pl,v 1.3 2001/03/18 14:49:01 dawes Exp $
 #
 # Copyright © 2000,2001 by VA Linux Systems, Inc.
 #
