@@ -1,9 +1,8 @@
 #!/usr/bin/perl
 #
-# $XFree86: xc/config/util/mkhtmlindex.pl,v 1.4 2004/03/01 17:56:25 dawes Exp $
+# $XFree86: xc/config/util/mkhtmlindex.pl,v 1.2 2001/03/15 19:02:31 dawes Exp $
 #
 # Copyright © 2000,2001 by VA Linux Systems, Inc.
-# Copyright © 2004 by David H. Dawes.
 #
 # Generate index files for HTML man pages.
 #
@@ -44,29 +43,29 @@ foreach $vol (@vollist) {
 <HTML>
 <HEAD>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<TITLE>XFree86[tm] Manual pages: Section $vol</TITLE>
+<TITLE>X.Org Manual pages: Section $vol</TITLE>
 </HEAD>
 <BODY BGCOLOR="#efefef" TEXT="black" LINK="blue" VLINK="#551A8B" ALINK="red">
 
-<H1>XFree86[tm] Manual pages: Section $vol</H1>
+<H1>X.Org Manual pages: Section $vol</H1>
 <P>
 <UL>
 EOF
 
 	foreach $file (sort readdir dir) {
-		if ($file =~ /\.$vol\.html/) {
+		if ($file =~ "\.$vol\.html") {
 			open(file, "<$dir/$file") || die "Can't open $dir/$file";
 			while (<file>) {
 				chop;
-				if (/^<H2>/i) {
-					if (! /<\/H2>$/i) {
-						while (<file> && ! /<\/H2>$/i) {
+				if (/^<[hH]2>/) {
+					if (! /<\/[hH]2>$/) {
+						while (<file> && ! /<\/[hH]2>$/) {
 							;
 						}
 					}
 					$heading = "";
 					while (<file>) {
-						if (/^<H2>/i) {
+						if (/^<[hH]2>/) {
 							last;
 						}
 						$heading = "$heading" . "$_";
@@ -77,7 +76,7 @@ EOF
 						($name, $descr) = split(/-/, $heading, 2);
 						$file =~ /(.*)\.$vol\.html/;
 						$fname = $1;
-						$descr =~ s/<[Pp]>//g;
+						$descr =~ s/<[pP]>//g;
 						print mindex
 							"<LI><A href=\"$file\">$fname</A> - $descr</LI>";
 					}
