@@ -145,7 +145,7 @@ in this Software without prior written authorization from The Open Group.
  *	#include INCLUDE_IMAKEFILE
  *	<add any global targets like 'clean' and long dependencies>
  */
-#if defined(__FreeBSD__) || defined(__NetBSD__)
+#if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
 /* This needs to be before _POSIX_SOURCE gets defined */
 # include <sys/param.h>
 # include <sys/types.h>
@@ -1020,7 +1020,7 @@ get_libc_version(FILE *inFile)
 }
 #endif
 
-#if defined(__OpenBSD__) 
+#if defined(__OpenBSD__) || defined(__DragonFly__)
 static void
 get_stackprotector(FILE *inFile)
 {
@@ -1351,6 +1351,7 @@ get_gcc(char *cmd)
      defined(__NetBSD__) || \
      defined(__OpenBSD__) || \
      defined(__FreeBSD__) || \
+     defined(__DragonFly__) || \
      defined(__APPLE__) || \
      defined(__CYGWIN__) || \
      defined(__MINGW32__) || \
@@ -1690,7 +1691,7 @@ define_os_defaults(FILE *inFile)
       fprintf(inFile, "#define DefaultOSTeenyVersion 0\n");
     }
 #endif /* EMX */
-#if defined(__OpenBSD__)
+#if defined(__OpenBSD__) || defined(__DragonFly__)
   get_stackprotector(inFile);
 #endif
   return FALSE;
