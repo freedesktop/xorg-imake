@@ -1352,6 +1352,8 @@ get_gcc(char *cmd)
      defined(__OpenBSD__) || \
      defined(__FreeBSD__) || \
      defined(__APPLE__) || \
+     defined(__CYGWIN__) || \
+     defined(__MINGW32__) || \
      defined(__GNU__)
 	"/usr/bin/cc",	/* for Linux PostIncDir */
 # endif
