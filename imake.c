@@ -1422,7 +1422,11 @@ define_os_defaults(FILE *inFile)
 {
 #if defined CROSSCOMPILE || ( !defined(WIN32) && !defined(__UNIXOS2__) )
 #ifdef CROSSCOMPILE
+#ifdef __GNUC__
+  if (1)
+#else
   if ((sys != win32) && (sys != emx))
+#endif
 #endif
     {
 # if (defined(DEFAULT_OS_NAME) || defined(DEFAULT_OS_MAJOR_REV) || \
