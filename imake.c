@@ -1038,7 +1038,7 @@ get_stackprotector(FILE *inFile)
     abort();
   while (fgets(buf, sizeof(buf), fp)) {
     if (strstr(buf, "propolice") != NULL) {
-      fprintf(inFile, "#define HasGccStackProtector YES\n");
+      fprintf(inFile, "#define ProPoliceSupport YES\n");
       break;
     }
   }
