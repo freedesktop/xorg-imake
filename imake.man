@@ -22,11 +22,15 @@
 .\" not be used in advertising or otherwise to promote the sale, use or
 .\" other dealings in this Software without prior written authorization
 .\" from The Open Group.
-.TH IMAKE 1 "Release 6.1" "X Version 11"
+.\"
+.\" $XFree86: xc/config/imake/imake.man,v 1.9 2002/11/20 21:48:46 herrb Exp $
+.\"
+.TH IMAKE 1 __xorgversion__
 .SH NAME
 imake \- C preprocessor interface to the make utility
 .SH SYNOPSIS
 \fBimake\fP [ \fB\-D\fP\fIdefine\fP ] [ \fB\-I\fP\fIdir\fP ]
+[ \fB\-U\fP\fIdefine\fP ] 
 [ \fB\-T\fP\fItemplate\fP ]
 [ \fB\-f\fP \fIfilename\fP ] [ \fB\-C\fP \fIfilename\fP ]
 [ \fB\-s\fP \fIfilename\fP ] [ \fB\-e\fP ]
@@ -53,6 +57,10 @@ directory, relative to the top.
 This option is passed directly to \fIcpp\fP.  It is typically used to 
 indicate the directory in which the \fIimake\fP template and configuration
 files may be found.
+.TP 8
+.B \-U\fIdefine\fP
+This option is passed directly to \fIcpp\fP.  It is typically used to
+unset variables when debugging \fIimake\fP configuration files.
 .TP 8
 .B \-T\fItemplate\fP
 This option specifies the name of the master template file (which is usually
@@ -87,9 +95,9 @@ on the command line and passes the name of a file containing the
 following 3 lines:
 .sp
 .nf
-		#define IMAKE_TEMPLATE "Imake.tmpl"
-		#define INCLUDE_IMAKEFILE <Imakefile>
-		#include IMAKE_TEMPLATE
+\&		#define IMAKE_TEMPLATE "Imake.tmpl"
+\&		#define INCLUDE_IMAKEFILE <Imakefile>
+\&		#include IMAKE_TEMPLATE
 .fi
 .sp
 where \fIImake.tmpl\fP and \fIImakefile\fP may be overridden by the 
@@ -126,8 +134,8 @@ For example, the macro
 .ta 1i 1.6i 5i
 .nf
 
-#define	program_target(program, objlist)	@@\e
-program:	objlist		@@\e
+\& #define	program_target(program, objlist)	@@\e
+ program:	objlist		@@\e
 	$(CC)  \-o  $@  objlist  $(LDFLAGS)
 
 .fi
@@ -136,7 +144,7 @@ when called with
 will expand to
 .nf
 
-foo:	foo1.o  foo2.o
+ foo:	foo1.o  foo2.o
 	$(CC)  \-o  $@  foo1.o  foo2.o  $(LDFLAGS)
 
 .fi
@@ -216,7 +224,7 @@ Imakefile.c	temporary input file for cpp
 .br
 /tmp/IIf.XXXXXX	temporary Imakefile if specified Imakefile uses # comments
 .br
-/lib/cpp	default C preprocessor
+__cpp__	default C preprocessor
 .DT
 .SH "SEE ALSO"
 make(1), xmkmf(1)
@@ -238,7 +246,7 @@ If defined, this should be a valid path to a preprocessor program.
 E.g., ``/usr/local/cpp''.
 By default,
 .I imake
-will use /lib/cpp.
+will use cc -E or __cpp__, depending on the OS specific configuration.
 .TP 5
 .B IMAKEMAKE
 If defined, this should be a valid path to a make program,
