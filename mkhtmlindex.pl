@@ -57,15 +57,15 @@ EOF
 			open(file, "<$dir/$file") || die "Can't open $dir/$file";
 			while (<file>) {
 				chop;
-				if (/^<H2>/) {
-					if (! /<\/H2>$/) {
-						while (<file> && ! /<\/H2>$/) {
+				if (/^<[hH]2>/) {
+					if (! /<\/[hH]2>$/) {
+						while (<file> && ! /<\/[hH]2>$/) {
 							;
 						}
 					}
 					$heading = "";
 					while (<file>) {
-						if (/^<H2>/) {
+						if (/^<[hH]2>/) {
 							last;
 						}
 						$heading = "$heading" . "$_";
@@ -76,7 +76,7 @@ EOF
 						($name, $descr) = split(/-/, $heading, 2);
 						$file =~ /(.*)\.$vol\.html/;
 						$fname = $1;
-						$descr =~ s/<[P]>//g;
+						$descr =~ s/<[pP]>//g;
 						print mindex
 							"<LI><A href=\"$file\">$fname</A> - $descr</LI>";
 					}
