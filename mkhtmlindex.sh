@@ -34,11 +34,11 @@ for s in $VOLLIST; do
 <HTML>
 <HEAD>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<TITLE>XFree86[tm] Manual pages: Section $s</TITLE>
+<TITLE>X.Org Manual pages: Section $s</TITLE>
 </HEAD>
 <BODY BGCOLOR="#efefef" TEXT="black" LINK="blue" VLINK="#551A8B" ALINK="red">
 
-<H1>XFree86[tm] Manual pages: Section $s</H1>
+<H1>X.Org Manual pages: Section $s</H1>
 <P>
 <UL>
 EOF
