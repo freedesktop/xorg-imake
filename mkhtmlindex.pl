@@ -43,11 +43,11 @@ foreach $vol (@vollist) {
 <HTML>
 <HEAD>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<TITLE>XFree86[tm] Manual pages: Section $vol</TITLE>
+<TITLE>X.Org Manual pages: Section $vol</TITLE>
 </HEAD>
 <BODY BGCOLOR="#efefef" TEXT="black" LINK="blue" VLINK="#551A8B" ALINK="red">
 
-<H1>XFree86[tm] Manual pages: Section $vol</H1>
+<H1>X.Org Manual pages: Section $vol</H1>
 <P>
 <UL>
 EOF
