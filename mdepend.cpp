@@ -1,18 +1,19 @@
 XCOMM!/bin/sh
 XCOMM
 XCOMM $Xorg: mdepend.cpp,v 1.3 2000/08/17 19:41:52 cpqbld Exp $
+XCOMM $XdotOrg: $
 XCOMM
 XCOMM	Do the equivalent of the 'makedepend' program, but do it right.
 XCOMM
 XCOMM	Usage:
 XCOMM
 XCOMM	makedepend [cpp-flags] [-w width] [-s magic-string] [-f makefile]
-XCOMM	  [-o object-suffix]
+XCOMM	  [-o object-suffix] [-v] [-a] [-cc compiler] [-d dependencyflag]
 XCOMM
 XCOMM	Notes:
 XCOMM
 XCOMM	The C compiler used can be overridden with the environment
-XCOMM	variable "CC".
+XCOMM	variable "CC" or the command line flag -cc.
 XCOMM
 XCOMM	The "-v" switch of the "makedepend" program is not supported.
 XCOMM
@@ -59,6 +60,7 @@ width=78
 endmarker=""
 verbose=n
 append=n
+compilerlistsdepends=n
 
 while [ $# != 0 ]
 do
@@ -122,6 +124,15 @@ do
 			    shift
 			    ;;
 
+			# Flag to tell compiler to output dependencies directly
+			# For example, with Sun compilers, -xM or -xM1 or
+			# with gcc, -M
+		        -d)
+			    compilerlistsdepends="y"
+			    compilerlistdependsflag="$2"
+			    shift
+			    ;;
+
 			-*)
 			    echo "Unknown option '$1' ignored" 1>&2
 			    ;;
@@ -136,6 +147,10 @@ do
     shift
 done
 echo ' $*' >> $ARGS
+
+if [ "$compilerlistsdepends"x = "y"x ] ; then
+  CC="$CC $compilerlistdependsflag"
+fi
 
 echo "#!/bin/sh" > $CPPCMD
 echo "exec $CC `cat $ARGS`" >> $CPPCMD
@@ -165,6 +180,13 @@ if [ "$verbose"x = "y"x ]; then
 fi
 
 echo '' > $DEPENDLINES
+
+if [ "$compilerlistsdepends"x = "y"x ] ; then
+    for i in $files
+    do
+	$CPPCMD $i >> $DEPENDLINES
+    done
+else
 for i in $files
 do
     $CPPCMD $i \
@@ -211,6 +233,7 @@ done \
 		print rec
 	    }' \
   | egrep -v '^[^:]*:[ 	]*$' >> $DEPENDLINES
+fi
 
 trap "" 1 2 13 15	# Now we are committed
 case "$makefile" in
