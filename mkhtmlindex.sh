@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $XFree86: xc/config/util/mkhtmlindex.sh,v 1.5 2003/08/11 17:41:28 eich Exp $
+# $XFree86$
 #
 # Copyright © 2000 by Precision Insight, Inc.
 #
