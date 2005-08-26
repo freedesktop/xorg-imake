@@ -31,14 +31,20 @@ CC=PREPROC
 silent='-'
 
 TMP=`pwd`/.mdep$$
-CPPCMD=${TMP}a
-DEPENDLINES=${TMP}b
-TMPMAKEFILE=${TMP}c
-MAGICLINE=${TMP}d
-ARGS=${TMP}e
 
-trap "rm -f ${TMP}*; exit 1" 1 2 15
-trap "rm -f ${TMP}*; exit 0" 1 2 13
+rm -rf ${TMP}
+if ! mkdir -p ${TMP}; then
+  echo "$0: cannot create ${TMP}, exit." >&2
+fi
+
+CPPCMD=${TMP}/a
+DEPENDLINES=${TMP}/b
+TMPMAKEFILE=${TMP}/c
+MAGICLINE=${TMP}/d
+ARGS=${TMP}/e
+
+trap "rm -rf ${TMP}; exit 1" 1 2 15
+trap "rm -rf ${TMP}; exit 0" 1 2 13
 
 echo " \c" > $CPPCMD
 if [ `wc -c < $CPPCMD` -eq 1 ]
@@ -276,5 +282,5 @@ case "$makefile" in
 
 esac
 
-rm -f ${TMP}*
+rm -rf ${TMP}*
 exit 0
