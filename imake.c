@@ -251,7 +251,7 @@ char *malloc(), *realloc();
 #  define SYS_NMLN 257
 # endif
 #endif
-#if defined(linux) || defined(__GNU__)
+#if defined(linux) || defined(__GNU__) || defined(__GLIBC__)
 #include <limits.h>
 #include <stdio.h>
 #endif
@@ -913,7 +913,7 @@ trim_version(char *p)
 }
 #endif
 
-#if defined linux
+#if defined(linux) || defined(__GLIBC__)
 const char *libc_c=
 "#include <stdio.h>\n"
 "#include <ctype.h>\n"
@@ -1048,7 +1048,7 @@ get_stackprotector(FILE *inFile)
 #endif
 	
 
-#if defined CROSSCOMPILE || defined linux
+#if defined CROSSCOMPILE || defined linux || defined(__GLIBC__)
 static void
 get_distrib(FILE *inFile)
 {
@@ -1355,7 +1355,8 @@ get_gcc(char *cmd)
      defined(__APPLE__) || \
      defined(__CYGWIN__) || \
      defined(__MINGW32__) || \
-     defined(__GNU__)
+     defined(__GNU__) || \
+     defined(__GLIBC__)
 	"/usr/bin/cc",	/* for Linux PostIncDir */
 # endif
 	"/usr/local/bin/gcc",
@@ -1448,7 +1449,7 @@ define_os_defaults(FILE *inFile)
 	  else
 	      name = &uts_name;
       }
-#if defined CROSSCOMPILE && defined linux
+#if defined CROSSCOMPILE && (defined linux || defined(__GLIBC__))
       else {
 	  strncpy(uts_name.sysname,cross_uts_sysname,SYS_NMLN);
 	  strncpy(uts_name.release,cross_uts_release,SYS_NMLN);
@@ -1605,13 +1606,13 @@ define_os_defaults(FILE *inFile)
 # if defined CROSSCOMPILE
       if (CrossCompiling && sys == LinuX)
 # endif
-# if defined CROSSCOMPILE || defined linux
-#  ifdef CROSSCOMPILE
+# if defined CROSSCOMPILE || defined linux || defined(__GLIBC__)
+#  if defined(CROSSCOMPILE) && defined(__linux__)
 	if (sys == LinuX)
 #  endif
 	  get_distrib (inFile);
 # endif
-# if defined linux
+# if defined linux || defined(__GLIBC__)
 #  if defined CROSSCOMPILE
       if (!CrossCompiling)
 #  endif
@@ -1625,9 +1626,9 @@ define_os_defaults(FILE *inFile)
 	  fprintf(inFile,"#define DefaultLinuxCLibTeenyVersion 0\n");
       }
 #  endif
-# endif /* linux */
-# if defined CROSSCOMPILE || defined linux
-#  if defined CROSSCOMPILE
+# endif /* linux || __GLIBC__ */
+# if defined CROSSCOMPILE || defined linux || defined(__GLIBC__)
+#  if defined CROSSCOMPILE && defined(__linux__)
       if (sys == LinuX)
 #  endif
 	  get_ld_version(inFile);
