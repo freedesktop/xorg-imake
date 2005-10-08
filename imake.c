@@ -153,7 +153,11 @@ in this Software without prior written authorization from The Open Group.
 #endif
 #include <stdlib.h>
 #include <stdio.h>
-#include "Xosdefs.h"
+#ifdef MONOLITH
+# include "Xosdefs.h"
+#else
+# include <X11/Xosdefs.h>
+#endif
 #include <string.h>
 #include <ctype.h>
 #ifdef WIN32
