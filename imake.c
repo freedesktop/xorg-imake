@@ -195,7 +195,7 @@ in this Software without prior written authorization from The Open Group.
 #include <sys/stat.h>
 #ifndef X_NOT_POSIX
 # ifdef _POSIX_SOURCE
-#  ifdef SCO325
+#  ifdef __SCO__
 #   include <sys/procset.h>
 #   include <sys/siginfo.h>
 #  endif
