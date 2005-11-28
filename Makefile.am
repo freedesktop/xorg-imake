@@ -28,7 +28,7 @@ imake_SOURCES = imake.c imakemdep.h
 dist_bin_SCRIPTS = makeg
 
 # Man page
-appmandir =  $(mandir)/man$(APP_MAN_SUFFIX)
+appmandir = $(APP_MAN_DIR)
 
 appman_SOURCES = imake.man makeg.man
 appman_DATA = $(appman_SOURCES:man=@APP_MAN_SUFFIX@)
