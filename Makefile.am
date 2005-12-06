@@ -30,10 +30,10 @@ dist_bin_SCRIPTS = makeg
 # Man page
 appmandir = $(APP_MAN_DIR)
 
-appman_SOURCES = imake.man makeg.man
-appman_DATA = $(appman_SOURCES:man=@APP_MAN_SUFFIX@)
+appman_PRE = imake.man makeg.man
+appman_DATA = $(appman_PRE:man=@APP_MAN_SUFFIX@)
 
-EXTRA_DIST = $(appman_SOURCES)
+EXTRA_DIST = $(appman_PRE)
 CLEANFILES = $(appman_DATA)
 
 SED = sed
