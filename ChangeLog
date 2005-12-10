@@ -1,3 +1,9 @@
+2005-12-10  Kevin E. Martin  <kem-at-freedesktop-dot-org>
+
+	* Makefile.am:
+	* configure.ac:
+	Add support for building imake config utilities.
+
 2005-12-06  Kevin E. Martin  <kem-at-freedesktop-dot-org>
 
 	* Makefile.am:
@@ -24,3 +30,10 @@
 
 	* configure.ac:
 	Update package version number for X11R7 RC2 release.
+
+2005-10-16  Donnie Berkholz  <spyderous@gentoo.org>
+
+	* Makefile.am:
+	Bug #4725 <https://bugs.freedesktop.org/show_bug.cgi?id=4725>
+	Detect cf files in the correct location and mirror the monolithic
+	install.
