@@ -1,3 +1,8 @@
+2005-12-11  Alan Coopersmith  <alan.coopersmith@sun.com>
+
+	* Makefile.am: 
+	Fix mkhtmlindex rules to not use $< so they work with non-GNU makes.
+
 2005-12-10  Kevin E. Martin  <kem-at-freedesktop-dot-org>
 
 	* Makefile.am:

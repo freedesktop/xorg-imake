@@ -83,12 +83,14 @@ mergelib: mergelib.cpp
 	$(RAWCPP) $(RAWCPPFLAGS) -DARCMD="$(ARCMD)" -DRANLIB="$(RANLIB)" < $(srcdir)/mergelib.cpp | $(SED) -e /^\#/d | $(SED) -e s/XCOMM/\#/ > $@
 
 if HAS_PERL
-mkhtmlindex: mkhtmlindex.pl
-	cp $< $@
+MKHTMLINDEX_SCRIPT = $(srcdir)/mkhtmlindex.pl
 else
-mkhtmlindex: mkhtmlindex.sh
-	cp $< $@
+MKHTMLINDEX_SCRIPT = $(srcdir)/mkhtmlindex.sh
 endif
+
+mkhtmlindex: $(MKHTMLINDEX_SCRIPT)
+	cp $(MKHTMLINDEX_SCRIPT) $@
+
 
 CLEANFILES = \
 	xmkmf \
