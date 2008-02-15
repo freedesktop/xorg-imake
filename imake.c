@@ -1057,8 +1057,7 @@ get_stackprotector(FILE *inFile)
       break;
     }
   }
-  if (pclose(fp)) 
-    abort();
+  pclose(fp);
 }
 #endif
 	
