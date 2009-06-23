@@ -145,6 +145,9 @@ in this Software without prior written authorization from The Open Group.
  *	#include INCLUDE_IMAKEFILE
  *	<add any global targets like 'clean' and long dependencies>
  */
+
+#include "config.h"
+
 #if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
 /* This needs to be before _POSIX_SOURCE gets defined */
 # include <sys/param.h>
@@ -278,10 +281,6 @@ extern int sys_nerr;
 
 #if defined(__NetBSD__)		/* see code clock in init() below */
 #include <sys/utsname.h>
-#endif
-
-#if !(defined(Lynx) || defined(__Lynx__) || (defined(SVR4) && !defined(sun))) && !defined (__CYGWIN__)
-#define HAS_MKSTEMP
 #endif
 
 typedef unsigned char boolean;
