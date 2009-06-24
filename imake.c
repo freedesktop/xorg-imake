@@ -223,16 +223,16 @@ typedef union wait	waitType;
 #  define WIFEXITED(w) waitCode(w)
 # endif
 #endif /* X_NOT_POSIX */
-# include <stdlib.h>
+#include <stdlib.h>
 #include <errno.h>
 #ifdef __minix_vmd
-#define USE_FREOPEN		1
+# define USE_FREOPEN		1
 #endif
 
 #ifndef WIN32
-#include <sys/utsname.h>
+# include <sys/utsname.h>
 #else
-#include <windows.h>
+# include <windows.h>
 #endif
 #ifndef SYS_NMLN
 # ifdef _SYS_NMLN
@@ -242,22 +242,22 @@ typedef union wait	waitType;
 # endif
 #endif
 #if defined(linux) || defined(__GNU__) || defined(__GLIBC__)
-#include <limits.h>
-#include <stdio.h>
+# include <limits.h>
+# include <stdio.h>
 #endif
 #ifdef __QNX__
-#include <unix.h>
+# include <unix.h>
 #endif
 
 #if defined(__NetBSD__)		/* see code clock in init() below */
-#include <sys/utsname.h>
+# include <sys/utsname.h>
 #endif
 
 typedef unsigned char boolean;
 #define TRUE		1
 #define FALSE		0
 
-# include "imakemdep.h"
+#include "imakemdep.h"
 #ifdef CROSSCOMPILE
 # include "imakemdep_cpp.h"
 #endif
@@ -274,7 +274,7 @@ int xvariables[10];
 #endif
 
 #ifndef PATH_MAX
-#define PATH_MAX 1024
+# define PATH_MAX 1024
 #endif
 
 /*
@@ -636,10 +636,10 @@ SetOpts(int argc, char **argv)
 	    if (!cpp)
 	    {
 		AddCppArg("-E");
-#ifdef __GNUC__
+#  ifdef __GNUC__
 		if (verbose)
 		    AddCppArg("-v");
-#endif
+#  endif
 		cpp = DEFAULT_CC;
 	    }
 # else
@@ -955,7 +955,7 @@ get_libc_version(FILE *inFile)
   char *command;
 
   /* If $TMPDIR is defined and has an acceptable length,
-   * use that as tmp dir, else use /tmp.  That fixes 
+   * use that as tmp dir, else use /tmp.  That fixes
    * problems with /tmp mounted "noexec".
    */
   if((tmpdir = getenv("TMPDIR")) != NULL && strlen(tmpdir) < (4096-13))
@@ -1011,14 +1011,14 @@ get_stackprotector(FILE *inFile)
   FILE *fp;
   char *cc;
   char command[1024], buf[1024];
-  
+
   cc = getenv("CC");
   if (cc == NULL) {
     cc = "cc";
   }
   snprintf(command, sizeof(command), "%s -v 2>&1", cc);
   fp = popen(command, "r");
-  if (fp == NULL) 
+  if (fp == NULL)
     abort();
   while (fgets(buf, sizeof(buf), fp)) {
     if (strstr(buf, "propolice") != NULL) {
@@ -1029,7 +1029,7 @@ get_stackprotector(FILE *inFile)
   pclose(fp);
 }
 #endif
-	
+
 
 #if defined CROSSCOMPILE || defined linux || defined(__GLIBC__)
 static void
@@ -1055,14 +1055,14 @@ get_distrib(FILE *inFile)
   fprintf (inFile, "%s\n", "#define LinuxWare       11");
   fprintf (inFile, "%s\n", "#define LinuxYggdrasil  12");
 
-#ifdef CROSSCOMPILE
+# ifdef CROSSCOMPILE
   if (CrossCompiling) {
       fprintf (inFile, "%s\n",
 	       "#define DefaultLinuxDistribution LinuxUnknown");
       fprintf (inFile, "%s\n", "#define DefaultLinuxDistName Unknown");
       return;
   }
-#endif
+# endif
   if (lstat (suse, &sb) == 0) {
     fprintf (inFile, "%s\n", "#define DefaultLinuxDistribution LinuxSuSE");
     fprintf (inFile, "%s\n", "#define DefaultLinuxDistName SuSE");
@@ -1095,7 +1095,7 @@ get_ld_version(FILE *inFile)
   int ldmajor, ldminor;
   const char *ld = "ld -v";
 
-#ifdef CROSSCOMPILE
+# ifdef CROSSCOMPILE
   if (CrossCompiling) {
       char cmd[PATH_MAX];
       strcpy (cmd, CrossCompileDir);
@@ -1103,7 +1103,7 @@ get_ld_version(FILE *inFile)
       strcat (cmd,ld);
       ldprog = popen (cmd, "r");
   } else
-#endif
+# endif
       ldprog = popen (ld, "r");
 
   if (ldprog) {
@@ -1171,7 +1171,7 @@ get_binary_format(FILE *inFile)
  * Returns: 0 if successful, -1 if not.
  */
 static int
-ask_sun_compiler_for_versions(const char *cmd, const char *path, 
+ask_sun_compiler_for_versions(const char *cmd, const char *path,
   int *cmajor, int *cminor)
 {
   char buf[BUFSIZ];
@@ -1180,7 +1180,7 @@ ask_sun_compiler_for_versions(const char *cmd, const char *path,
   FILE* ccproc;
   const char vflag[] = " -V 2>&1";
   int retval = -1;
-  
+
   int len = strlen(cmd) + sizeof(vflag);
 
   if (path != NULL) {
@@ -1208,7 +1208,7 @@ ask_sun_compiler_for_versions(const char *cmd, const char *path,
 		  }
 	      }
 	      if (retval != 0) {
-		  fprintf(stderr, 
+		  fprintf(stderr,
 		    "warning: could not parse version number in output of:\n"
 		    "         %s\n", cmdtorun);
 	      }
@@ -1229,20 +1229,20 @@ get_sun_compiler_versions (FILE *inFile)
   struct stat sb;
 
   /* If cross-compiling, only check CrossCompilerDir for compilers.
-   * If not cross-compiling, first check cc in users $PATH, 
+   * If not cross-compiling, first check cc in users $PATH,
    * then try /opt/SUNWspro if not found in the users $PATH
    */
 
-#if defined CROSSCOMPILE
+# if defined CROSSCOMPILE
   if (CrossCompiling) {
       if (ask_sun_compiler_for_versions("cc", CrossCompileDir,
 	&cmajor, &cminor) == 0) {
 	      found = 1;
       }
-  } 
+  }
   else
-#endif
-  {    
+# endif
+  {
       if (ask_sun_compiler_for_versions("cc", NULL, &cmajor, &cminor) == 0) {
 	  found = 1;
       } else if (ask_sun_compiler_for_versions("cc", sunpro_path,
@@ -1261,22 +1261,22 @@ get_sun_compiler_versions (FILE *inFile)
 
   /* Now do it again for C++ compiler (CC) */
   found = 0;
-#if defined CROSSCOMPILE
+# if defined CROSSCOMPILE
   if (CrossCompiling) {
       if (ask_sun_compiler_for_versions("CC", CrossCompileDir,
 	&cmajor, &cminor) == 0) {
 	      found = 1;
       }
-  } 
+  }
   else
-#endif
-  {    
+# endif
+  {
       if (ask_sun_compiler_for_versions("CC", NULL, &cmajor, &cminor) == 0) {
 	  found = 1;
       } else if (ask_sun_compiler_for_versions("CC", sunpro_path,
 	&cmajor, &cminor) == 0) {
 	  found = 1;
-	  fprintf(inFile, 
+	  fprintf(inFile,
 		"#define DefaultSunProCplusplusCompilerDir %s", sunpro_path);
       }
   }
@@ -1297,7 +1297,7 @@ static void
 get_gcc_version(FILE *inFile, char *name)
 {
     fprintf (inFile, "#define HasGcc 1\n");
-#ifdef CROSSCOMPILE
+# ifdef CROSSCOMPILE
     if (CrossCompiling)
     {
 	if (gnu_c > 1) {
@@ -1308,20 +1308,20 @@ get_gcc_version(FILE *inFile, char *name)
 	fprintf (inFile, "#define GccMajorVersion %d\n", gnu_c);
 	fprintf (inFile, "#define GccMinorVersion %d\n", gnu_c_minor);
     } else
-#endif
-    {
-#if __GNUC__ > 1
-	fprintf (inFile, "#define HasGcc2 1\n");
-# if __GNUC__ > 2
-	fprintf (inFile, "#define HasGcc3 1\n");
 # endif
-#endif
+    {
+# if __GNUC__ > 1
+	fprintf (inFile, "#define HasGcc2 1\n");
+#  if __GNUC__ > 2
+	fprintf (inFile, "#define HasGcc3 1\n");
+#  endif
+# endif
 	fprintf (inFile, "#define GccMajorVersion %d\n", __GNUC__);
 	fprintf (inFile, "#define GccMinorVersion %d\n", __GNUC_MINOR__);
     }
-#if defined(HAS_MERGE_CONSTANTS)
+# if defined(HAS_MERGE_CONSTANTS)
     fprintf (inFile, "#define HasGccMergeConstants %d\n", HAS_MERGE_CONSTANTS);
-#endif
+# endif
 }
 #endif
 
@@ -1330,7 +1330,7 @@ get_gcc(char *cmd)
 {
   struct stat sb;
     static char* gcc_path[] = {
-# if defined(linux) || \
+#if defined(linux) || \
      defined(__NetBSD__) || \
      defined(__OpenBSD__) || \
      defined(__FreeBSD__) || \
@@ -1341,7 +1341,7 @@ get_gcc(char *cmd)
      defined(__GNU__) || \
      defined(__GLIBC__)
 	"/usr/bin/cc",	/* for Linux PostIncDir */
-# endif
+#endif
 	"/usr/local/bin/gcc",
 	"/opt/gnu/bin/gcc",
 	"/usr/pkg/bin/gcc"
@@ -1408,13 +1408,13 @@ boolean
 define_os_defaults(FILE *inFile)
 {
 #if defined CROSSCOMPILE || ( !defined(WIN32) && !defined(__UNIXOS2__) )
-#ifdef CROSSCOMPILE
-#ifdef __GNUC__
+# ifdef CROSSCOMPILE
+#  ifdef __GNUC__
   if (1)
-#else
+#  else
   if ((sys != win32) && (sys != emx))
-#endif
-#endif
+#  endif
+# endif
     {
 # if (defined(DEFAULT_OS_NAME) || defined(DEFAULT_OS_MAJOR_REV) || \
      defined(DEFAULT_OS_MINOR_REV) || defined(DEFAULT_OS_TEENY_REV))
@@ -1423,16 +1423,16 @@ define_os_defaults(FILE *inFile)
 	char buf[SYS_NMLN * 5 + 1];
 
 	/* Obtain the system information. */
-#ifdef CROSSCOMPILE
+#  ifdef CROSSCOMPILE
       if (!CrossCompiling)
-#endif
+#  endif
       {
 	  if (uname(&uts_name) < 0)
 	      LogFatal("Cannot invoke uname", "");
 	  else
 	      name = &uts_name;
       }
-#if defined CROSSCOMPILE && (defined linux || defined(__GLIBC__))
+#  if defined CROSSCOMPILE && (defined linux || defined(__GLIBC__))
       else {
 	  strncpy(uts_name.sysname,cross_uts_sysname,SYS_NMLN);
 	  strncpy(uts_name.release,cross_uts_release,SYS_NMLN);
@@ -1440,14 +1440,14 @@ define_os_defaults(FILE *inFile)
 	  strncpy(uts_name.machine,cross_uts_machine,SYS_NMLN);
 	  name = &uts_name;
       }
-#endif
-# ifdef __FreeBSD__
+#  endif
+#  ifdef __FreeBSD__
        /* Override for compiling in chroot of other OS version, such as
         * in the bento build cluster.
         */
        {
 	 char *e;
-	 if ((e = getenv("OSREL")) != NULL && 
+	 if ((e = getenv("OSREL")) != NULL &&
 	     strlen(name->sysname) + strlen(e) + 1 < SYS_NMLN) {
 	  strcpy(name->release, e);
 	  strcpy(name->version, name->sysname);
@@ -1455,7 +1455,7 @@ define_os_defaults(FILE *inFile)
 	  strcat(name->version, e);
 	 }
        }
-# endif
+#  endif
 
 #  if defined DEFAULT_OS_NAME
 #   if defined CROSSCOMPILE
@@ -1967,10 +1967,10 @@ ReadLine(FILE *tmpfd, char *tmpfname)
 		fseek(tmpfd, 0, 0);
 #if defined(SYSV) || defined(WIN32) || defined(USE_FREOPEN)
 		tmpfd = freopen(tmpfname, "w+", tmpfd);
-#ifdef WIN32
+# ifdef WIN32
 		if (! tmpfd) /* if failed try again */
 			tmpfd = freopen(tmpfname, "w+", fp);
-#endif
+# endif
 		if (! tmpfd)
 			LogFatal("cannot reopen %s\n", tmpfname);
 #else	/* !SYSV */
@@ -2045,10 +2045,10 @@ KludgeOutputLine(char **pline)
 		break;
 	    case ' ':	/*May need a tab*/
 	    default:
-#ifdef CROSSCOMPILE
+# ifdef CROSSCOMPILE
 		if (inline_syntax)
-#endif
-#if defined CROSSCOMPILE || defined INLINE_SYNTAX
+# endif
+# if defined CROSSCOMPILE || defined INLINE_SYNTAX
 		{
 		    if (*p == '<' && p[1] == '<') { /* inline file close */
 			InInline--;
@@ -2056,7 +2056,7 @@ KludgeOutputLine(char **pline)
 			break;
 		    }
 		}
-#endif
+# endif
 		/*
 		 * The following cases should not be treated as beginning of
 		 * rules:
@@ -2095,26 +2095,26 @@ KludgeOutputLine(char **pline)
 			quotechar = ']';
 			break;
 		    case '=':
-#ifdef CROSSCOMPILE
+# ifdef CROSSCOMPILE
 			if (remove_cpp_leadspace)
-#endif
-#if defined CROSSCOMPILE || defined REMOVE_CPP_LEADSPACE
+# endif
+# if defined CROSSCOMPILE || defined REMOVE_CPP_LEADSPACE
 			{
 			    if (!InRule && **pline == ' ') {
 				while (**pline == ' ')
 				    (*pline)++;
 			    }
 			}
-#endif
+# endif
 			goto breakfor;
-#if defined CROSSCOMPILE || defined INLINE_SYNTAX
+# if defined CROSSCOMPILE || defined INLINE_SYNTAX
 		    case '<':
 			if (inline_syntax) {
 			    if (p[1] == '<') /* inline file start */
 				InInline++;
 			}
 			break;
-#endif
+# endif
 		    case ':':
 			if (p[1] == '=')
 			    goto breakfor;
