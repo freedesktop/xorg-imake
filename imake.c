@@ -156,22 +156,11 @@ in this Software without prior written authorization from The Open Group.
 #endif
 #include <stdlib.h>
 #include <stdio.h>
-#ifdef MONOLITH
-# include "Xosdefs.h"
-#else
-# include <X11/Xosdefs.h>
-#endif
+#include <X11/Xosdefs.h>
 #include <string.h>
 #include <ctype.h>
 #ifdef WIN32
 # include "Xw32defs.h"
-#endif
-#if 0
-#ifndef X_NOT_POSIX
-# ifndef _POSIX_SOURCE
-#  define _POSIX_SOURCE
-# endif
-#endif
 #endif
 #include <sys/types.h>
 #include <fcntl.h>
