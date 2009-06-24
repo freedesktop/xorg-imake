@@ -224,17 +224,11 @@ typedef union wait	waitType;
 # endif
 #endif /* X_NOT_POSIX */
 # include <stdlib.h>
-#if defined(macII) && !defined(__STDC__)  /* stdlib.h fails to define these */
-char *malloc(), *realloc();
-#endif /* macII */
 #include <errno.h>
 #ifdef __minix_vmd
 #define USE_FREOPEN		1
 #endif
 
-#if !((defined(sun) && !defined(SVR4)) || defined(macII))
-#define USE_STRERROR		1
-#endif
 #ifndef WIN32
 #include <sys/utsname.h>
 #else
@@ -253,19 +247,6 @@ char *malloc(), *realloc();
 #endif
 #ifdef __QNX__
 #include <unix.h>
-#endif
-
-/*
- * This define of strerror is copied from (and should be identical to)
- * Xos.h, which we don't want to include here for bootstrapping reasons.
- */
-#ifndef USE_STRERROR
-# ifndef strerror
-extern char *sys_errlist[];
-extern int sys_nerr;
-#  define strerror(n) \
-    (((n) >= 0 && (n) < sys_nerr) ? sys_errlist[n] : "unknown error")
-# endif
 #endif
 
 #if defined(__NetBSD__)		/* see code clock in init() below */
