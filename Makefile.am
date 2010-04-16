@@ -76,13 +76,13 @@ bin_SCRIPTS = \
 	$(MKHTMLINDEX)
 
 xmkmf: xmkmf.cpp
-	$(RAWCPP) $(RAWCPPFLAGS) -DCONFIGDIRSPEC='"-I$(XCONFDIR)"' < $(srcdir)/xmkmf.cpp | $(SED) -e /^\#/d | $(SED) -e s/XCOMM/\#/ > $@
+	$(AM_V_GEN)$(RAWCPP) $(RAWCPPFLAGS) -DCONFIGDIRSPEC='"-I$(XCONFDIR)"' < $(srcdir)/xmkmf.cpp | $(SED) -e /^\#/d | $(SED) -e s/XCOMM/\#/ > $@
 
 ccmakedep: mdepend.cpp
-	$(RAWCPP) $(RAWCPPFLAGS) -DPREPROC='"$(PREPROCESSCMD_MKDEPEND)"' < $(srcdir)/mdepend.cpp | $(SED) -e /^\#/d | $(SED) -e s/XCOMM/\#/ > $@
+	$(AM_V_GEN)$(RAWCPP) $(RAWCPPFLAGS) -DPREPROC='"$(PREPROCESSCMD_MKDEPEND)"' < $(srcdir)/mdepend.cpp | $(SED) -e /^\#/d | $(SED) -e s/XCOMM/\#/ > $@
 
 mergelib: mergelib.cpp
-	$(RAWCPP) $(RAWCPPFLAGS) -DARCMD="$(ARCMD)" -DRANLIB="$(RANLIB)" < $(srcdir)/mergelib.cpp | $(SED) -e /^\#/d | $(SED) -e s/XCOMM/\#/ > $@
+	$(AM_V_GEN)$(RAWCPP) $(RAWCPPFLAGS) -DARCMD="$(ARCMD)" -DRANLIB="$(RANLIB)" < $(srcdir)/mergelib.cpp | $(SED) -e /^\#/d | $(SED) -e s/XCOMM/\#/ > $@
 
 if HAS_PERL
 MKHTMLINDEX_SCRIPT = $(srcdir)/mkhtmlindex.pl
@@ -91,7 +91,7 @@ MKHTMLINDEX_SCRIPT = $(srcdir)/mkhtmlindex.sh
 endif
 
 mkhtmlindex: $(MKHTMLINDEX_SCRIPT)
-	cp $(MKHTMLINDEX_SCRIPT) $@
+	$(AM_V_GEN)cp $(MKHTMLINDEX_SCRIPT) $@
 
 
 CLEANFILES = \
@@ -154,7 +154,7 @@ MAN_SUBSTS = \
 SUFFIXES = .$(APP_MAN_SUFFIX) .man
 
 .man.$(APP_MAN_SUFFIX):
-	sed $(MAN_SUBSTS) < $< > $@
+	$(AM_V_GEN)$(SED) $(MAN_SUBSTS) < $< > $@
 
 EXTRA_DIST += ChangeLog
 MAINTAINERCLEANFILES = ChangeLog
