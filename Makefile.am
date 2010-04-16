@@ -31,7 +31,9 @@ endif
 
 bin_PROGRAMS = imake $(REVPATH)
 
-imake_CFLAGS = $(XPROTO_CFLAGS) -DCPP_PROGRAM='"$(CPP_PROGRAM)"'
+AM_CFLAGS = $(CWARNFLAGS)
+
+imake_CFLAGS = $(XPROTO_CFLAGS) -DCPP_PROGRAM='"$(CPP_PROGRAM)"' $(CWARNFLAGS)
 imake_SOURCES = imake.c imakemdep.h
 
 revpath_SOURCES = revpath.c
@@ -157,9 +159,12 @@ SUFFIXES = .$(APP_MAN_SUFFIX) .man
 EXTRA_DIST += ChangeLog
 MAINTAINERCLEANFILES = ChangeLog
 
-.PHONY: ChangeLog
+.PHONY: ChangeLog INSTALL
+
+INSTALL:
+	$(INSTALL_CMD)
 
 ChangeLog:
 	$(CHANGELOG_CMD)
 
-dist-hook: ChangeLog
+dist-hook: ChangeLog INSTALL

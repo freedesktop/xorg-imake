@@ -28,9 +28,11 @@ AM_MAINTAINER_MODE
 
 AM_CONFIG_HEADER(config.h)
 
-# Require xorg-macros: XORG_RELEASE_VERSION XORG_CHANGELOG
-m4_ifndef([XORG_MACROS_VERSION], [AC_FATAL([must install xorg-macros 1.2 or later before running autoconf/autogen])])
-XORG_MACROS_VERSION(1.2)
+# Require xorg-macros: XORG_DEFAULT_OPTIONS
+m4_ifndef([XORG_MACROS_VERSION],
+	  [m4_fatal([must install xorg-macros 1.4 or later before running autoconf/autogen])])
+XORG_MACROS_VERSION(1.4)
+XORG_DEFAULT_OPTIONS
 
 AC_PROG_CC
 AC_PROG_INSTALL
@@ -128,9 +130,5 @@ AM_CONDITIONAL([BUILD_MKHTMLINDEX], [test "x$BUILD_MKHTMLINDEX" = xyes])
 # Checks for pkg-config packages
 PKG_CHECK_MODULES(XPROTO, xproto)
 AC_SUBST(XPROTO_CFLAGS)
-
-XORG_MANPAGE_SECTIONS
-XORG_RELEASE_VERSION
-XORG_CHANGELOG
 
 AC_OUTPUT([Makefile])
