@@ -23,45 +23,12 @@ do
 		echo >&2 "mkdirhier: directory name contains a newline: \`\`$directory''"
 		status=1
 		continue;;
-	///*) prefix=/;; # See Posix 2.3 "path".
-	//*) prefix=//;;
-	/*) prefix=/;;
 	-*) prefix=./;;
 	*) prefix=
 	esac
 
-	IFS=/
-	set x $directory
-	case $2 in
-	    */*)	# IFS parsing is broken
-		IFS=' '
-		set x `echo $directory | tr / ' '`
-		;;
-	esac
-	IFS=$newline
-	shift
+	mkdir -p $prefix$directory || status=$?
 
-	for filename
-	do
-		path=$prefix$filename
-		prefix=$path/
-		shift
-
-		test -d "$path" || {
-			paths=$path
-			for filename
-			do
-				if [ -n "$filename" -a "$filename" != "." ]; then
-					path=$path/$filename
-					paths=$paths$newline$path
-				fi
-			done
-
-			mkdir $paths || status=$?
-
-			break
-		}
-	done
   done
 
 exit $status
