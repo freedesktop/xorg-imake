@@ -130,8 +130,6 @@ appman_DATA = $(bin_PROGRAMS:%$(EXEEXT)=%.@APP_MAN_SUFFIX@) $(bin_SCRIPTS:%=%.@A
 EXTRA_DIST += $(appman_PRE)
 CLEANFILES += $(appman_DATA)
 
-SED = sed
-
 # Strings to replace in man pages
 XORGRELSTRING = @PACKAGE_STRING@
   XORGMANNAME = X Version 11
