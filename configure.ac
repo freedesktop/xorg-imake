@@ -39,8 +39,7 @@ XORG_PROG_RAWCPP
 CPP_PROGRAM=${RAWCPP}
 AC_SUBST(CPP_PROGRAM)
 
-AC_CHECK_FUNC([mkstemp],
-   AC_DEFINE(HAS_MKSTEMP,1,[Define to 1 if you have the "mkstemp" function.]))
+AC_CHECK_FUNCS([mkstemp])
 
 AC_CHECK_PROG(HAS_PERL, perl, yes)
 AM_CONDITIONAL([HAS_PERL], [test "x$HAS_PERL" = xyes])

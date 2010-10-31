@@ -395,11 +395,11 @@ main(int argc, char *argv[])
 		if ((tmpfd = fopen(tmpMakefile, "w+")) == NULL)
 		   LogFatal("Cannot create temporary file %s.", tmpMakefile);
 	} else {
-#ifdef HAS_MKSTEMP
+#ifdef HAVE_MKSTEMP
 		int fd;
 #endif
 		tmpMakefile = Strdup(tmpMakefile);
-#ifndef HAS_MKSTEMP
+#ifndef HAVE_MKSTEMP
 		if (mktemp(tmpMakefile) == NULL ||
 		    (tmpfd = fopen(tmpMakefile, "w+")) == NULL) {
 		   LogFatal("Cannot create temporary file %s.", tmpMakefile);
@@ -1769,11 +1769,11 @@ CleanCppInput(char *imakefile)
 		    strcmp(ptoken, "pragma") &&
 		    strcmp(ptoken, "undef")) {
 		    if (outFile == NULL) {
-#ifdef HAS_MKSTEMP
+#ifdef HAVE_MKSTEMP
 			int fd;
 #endif
 			tmpImakefile = Strdup(tmpImakefile);
-#ifndef HAS_MKSTEMP
+#ifndef HAVE_MKSTEMP
 			if (mktemp(tmpImakefile) == NULL ||
 			    (outFile = fopen(tmpImakefile, "w+")) == NULL) {
 			    LogFatal("Cannot open %s for write.",
