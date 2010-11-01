@@ -22,5 +22,5 @@ find . -type l -print |
 
 echo Removing empty directories ...
 #find . -type d -depth -print | xargs rmdir > /dev/null 2>&1
-find . -type d -depth -empty -print -exec rmdir {} \;
+find . -depth -type d -empty -print -exec rmdir {} \;
 exit 0
