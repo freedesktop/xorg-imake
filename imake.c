@@ -1224,7 +1224,6 @@ get_sun_compiler_versions (FILE *inFile)
 {
   const char* sunpro_path = "/opt/SUNWspro/bin";
   int cmajor, cminor, found = 0;
-  struct stat sb;
 
   /* If cross-compiling, only check CrossCompilerDir for compilers.
    * If not cross-compiling, first check cc in users $PATH,
