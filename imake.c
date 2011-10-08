@@ -154,6 +154,8 @@ in this Software without prior written authorization from The Open Group.
 #endif
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdarg.h>
+#include <X11/Xfuncproto.h>
 #include <X11/Xosdefs.h>
 #include <string.h>
 #include <ctype.h>
@@ -326,9 +328,8 @@ char	*ReadLine(FILE *tmpfd, const char *tmpfname);
 const char	*CleanCppInput(const char *imakefile);
 char	*Strdup(const char *cp);
 char	*Emalloc(int size);
-void	LogFatalI(const char *s, int i);
-void	LogFatal(const char *x0, const char *x1);
-void	LogMsg(const char *x0, const char *x1);
+void	LogFatal(const char *x0, ...) _X_ATTRIBUTE_PRINTF(1, 2);
+void	LogMsg(const char *x0, ...) _X_ATTRIBUTE_PRINTF(1, 2);
 
 void	showit(FILE *fd);
 void	wrapup(void);
@@ -469,7 +470,7 @@ void
 catch(int sig)
 {
 	errno = 0;
-	LogFatalI("Signal %d.", sig);
+	LogFatal("Signal %d.", sig);
 }
 
 /*
@@ -675,30 +676,8 @@ FindImakefile(const char *Imakefile)
 	return(Imakefile);
 }
 
-void
-LogFatalI(const char *s, int i)
-{
-	/*NOSTRICT*/
-	LogFatal(s, (char *)(long)i);
-}
-
-void
-LogFatal(const char *x0, const char *x1)
-{
-	static boolean entered = FALSE;
-
-	if (entered)
-		return;
-	entered = TRUE;
-
-	LogMsg(x0, x1);
-	fprintf(stderr, "  Stop.\n");
-	wrapup();
-	exit(1);
-}
-
-void
-LogMsg(const char *x0, const char *x1)
+static void _X_ATTRIBUTE_PRINTF(1, 0)
+vLogMsg(const char *fmt, va_list args)
 {
 	int error_number = errno;
 
@@ -707,8 +686,36 @@ LogMsg(const char *x0, const char *x1)
 		fprintf(stderr, "%s\n", strerror(error_number));
 	}
 	fprintf(stderr, "%s: ", program);
-	fprintf(stderr, x0, x1);
+	vfprintf(stderr, fmt, args);
 	fprintf(stderr, "\n");
+}
+
+void
+LogFatal(const char *fmt, ...)
+{
+	static boolean entered = FALSE;
+	va_list args;
+
+	if (entered)
+		return;
+	entered = TRUE;
+
+	va_start(args, fmt);
+	vLogMsg(fmt, args);
+	va_end(args);
+	fprintf(stderr, "  Stop.\n");
+	wrapup();
+	exit(1);
+}
+
+void
+LogMsg(const char *fmt, ...)
+{
+	va_list args;
+
+	va_start(args, fmt);
+	vLogMsg(fmt, args);
+	va_end(args);
 }
 
 void
@@ -776,7 +783,7 @@ doit(FILE *outfd, const char *cmd, const char **argv)
 	if (status < 0)
 		LogFatal("Cannot spawn %s.", cmd);
 	if (status > 0)
-		LogFatalI("Exit code %d.", status);
+		LogFatal("Exit code %d.", status);
 #else
 	pid = fork();
 	if (pid < 0)
@@ -785,9 +792,9 @@ doit(FILE *outfd, const char *cmd, const char **argv)
 		while (wait(&status) > 0) {
 			errno = 0;
 			if (WIFSIGNALED(status))
-				LogFatalI("Signal %d.", waitSig(status));
+				LogFatal("Signal %d.", waitSig(status));
 			if (WIFEXITED(status) && waitCode(status))
-				LogFatalI("Exit code %d.", waitCode(status));
+				LogFatal("Exit code %d.", waitCode(status));
 		}
 	}
 	else {	/* child... dup and exec cmd */
@@ -2027,7 +2034,7 @@ Emalloc(int size)
 	char	*p;
 
 	if ((p = malloc(size)) == NULL)
-		LogFatalI("Cannot allocate %d bytes", size);
+		LogFatal("Cannot allocate %d bytes", size);
 	return(p);
 }
 
