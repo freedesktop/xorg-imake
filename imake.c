@@ -548,7 +548,7 @@ AddMakeArg(const char *arg)
 {
 	errno = 0;
 	if (make_argindex >= ARGUMENTS-1)
-		LogFatal("Out of internal storage.", "");
+		LogFatal("Out of internal storage.");
 	make_argv[ make_argindex++ ] = arg;
 	make_argv[ make_argindex ] = NULL;
 }
@@ -558,7 +558,7 @@ AddCppArg(const char *arg)
 {
 	errno = 0;
 	if (cpp_argindex >= ARGUMENTS-1)
-		LogFatal("Out of internal storage.", "");
+		LogFatal("Out of internal storage.");
 	cpp_argv[ cpp_argindex++ ] = arg;
 	cpp_argv[ cpp_argindex ] = NULL;
 }
@@ -590,7 +590,7 @@ SetOpts(int argc, char **argv)
 		    else {
 			argc--, argv++;
 			if (! argc)
-			    LogFatal("No description arg after -f flag", "");
+			    LogFatal("No description arg after -f flag");
 			Imakefile = argv[0];
 		    }
 		} else if (argv[0][1] == 's') {
@@ -600,7 +600,7 @@ SetOpts(int argc, char **argv)
 		    else {
 			argc--, argv++;
 			if (!argc)
-			    LogFatal("No description arg after -s flag", "");
+			    LogFatal("No description arg after -s flag");
 			Makefile = ((argv[0][0] == '-') && !argv[0][1]) ?
 			    NULL : argv[0];
 		    }
@@ -614,7 +614,7 @@ SetOpts(int argc, char **argv)
 		    else {
 			argc--, argv++;
 			if (! argc)
-			    LogFatal("No description arg after -T flag", "");
+			    LogFatal("No description arg after -T flag");
 			Template = argv[0];
 		    }
 		} else if (argv[0][1] == 'C') {
@@ -623,7 +623,7 @@ SetOpts(int argc, char **argv)
 		    else {
 			argc--, argv++;
 			if (! argc)
-			    LogFatal("No imakeCfile arg after -C flag", "");
+			    LogFatal("No imakeCfile arg after -C flag");
 			ImakefileC = argv[0];
 		    }
 		} else if (argv[0][1] == 'v') {
@@ -667,7 +667,7 @@ FindImakefile(const char *Imakefile)
 	} else {
 		if (access("Imakefile", R_OK) < 0) {
 			if (access("imakefile", R_OK) < 0)
-				LogFatal("No description file.", "");
+				LogFatal("No description file.");
 			else
 				Imakefile = "imakefile";
 		} else
@@ -787,7 +787,7 @@ doit(FILE *outfd, const char *cmd, const char **argv)
 #else
 	pid = fork();
 	if (pid < 0)
-		LogFatal("Cannot fork.", "");
+		LogFatal("Cannot fork.");
 	if (pid) {	/* parent... simply wait */
 		while (wait(&status) > 0) {
 			errno = 0;
@@ -870,7 +870,7 @@ parse_utsname(struct utsname *name, const char *fmt, char *result, const char *m
 
   /* Just in case... */
   if (strlen(buf) >= sizeof(buf))
-    LogFatal("Buffer overflow parsing uname.", "");
+    LogFatal("Buffer overflow parsing uname.");
 
   /* Parse the buffer.  The sscanf() return value is rarely correct. */
   *result = '\0';
@@ -1436,7 +1436,7 @@ define_os_defaults(FILE *inFile)
 #  endif
       {
 	  if (uname(&uts_name) < 0)
-	      LogFatal("Cannot invoke uname", "");
+	      LogFatal("Cannot invoke uname");
 	  else
 	      name = &uts_name;
       }
