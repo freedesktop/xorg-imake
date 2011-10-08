@@ -300,8 +300,10 @@ void KludgeOutputLine(char **), KludgeResetRule(void);
 
 const char *cpp = NULL;
 
-char	*tmpMakefile = "/tmp/Imf.XXXXXX";
-char	*tmpImakefile = "/tmp/IIf.XXXXXX";
+const char	*tmpMakefile;
+const char	*tmpMakefileTemplate = "/tmp/Imf.XXXXXX";
+const char	*tmpImakefile;
+const char	*tmpImakefileTemplate = "/tmp/IIf.XXXXXX";
 const char	*make_argv[ ARGUMENTS ] = {
 #ifdef WIN32
     "nmake"
@@ -399,21 +401,22 @@ main(int argc, char *argv[])
 #ifdef HAVE_MKSTEMP
 		int fd;
 #endif
-		tmpMakefile = Strdup(tmpMakefile);
+		char *tmpMakefileName = Strdup(tmpMakefileTemplate);
 #ifndef HAVE_MKSTEMP
-		if (mktemp(tmpMakefile) == NULL ||
-		    (tmpfd = fopen(tmpMakefile, "w+")) == NULL) {
-		   LogFatal("Cannot create temporary file %s.", tmpMakefile);
+		if (mktemp(tmpMakefileName) == NULL ||
+		    (tmpfd = fopen(tmpMakefileName, "w+")) == NULL) {
+		   LogFatal("Cannot create temporary file %s.", tmpMakefileName);
 		}
 #else
-		fd = mkstemp(tmpMakefile);
+		fd = mkstemp(tmpMakefileName);
 		if (fd == -1 || (tmpfd = fdopen(fd, "w+")) == NULL) {
 		   if (fd != -1) {
-		      unlink(tmpMakefile); close(fd);
+		      unlink(tmpMakefileName); close(fd);
 		   }
-		   LogFatal("Cannot create temporary file %s.", tmpMakefile);
+		   LogFatal("Cannot create temporary file %s.", tmpMakefileName);
 		}
 #endif
+		tmpMakefile = tmpMakefileName;
 	}
 	AddMakeArg("-f");
 	AddMakeArg( tmpMakefile );
@@ -1772,25 +1775,26 @@ CleanCppInput(const char *imakefile)
 #ifdef HAVE_MKSTEMP
 			int fd;
 #endif
-			tmpImakefile = Strdup(tmpImakefile);
+			char *tmpImakefileName = Strdup(tmpImakefileTemplate);
 #ifndef HAVE_MKSTEMP
-			if (mktemp(tmpImakefile) == NULL ||
-			    (outFile = fopen(tmpImakefile, "w+")) == NULL) {
+			if (mktemp(tmpImakefileName) == NULL ||
+			    (outFile = fopen(tmpImakefileName, "w+")) == NULL) {
 			    LogFatal("Cannot open %s for write.",
-				tmpImakefile);
+				tmpImakefileName);
 			}
 #else
-			fd=mkstemp(tmpImakefile);
+			fd=mkstemp(tmpImakefileName);
 			if (fd != -1)
 			    outFile = fdopen(fd, "w");
 			if (outFile == NULL) {
 			    if (fd != -1) {
-			       unlink(tmpImakefile); close(fd);
+			       unlink(tmpImakefileName); close(fd);
 			    }
 			    LogFatal("Cannot open %s for write.",
-				tmpImakefile);
+				tmpImakefileName);
 			}
 #endif
+			tmpImakefile = tmpImakefileName;
 		    }
 		    writetmpfile(outFile, punwritten, pbuf-punwritten,
 				 tmpImakefile);
