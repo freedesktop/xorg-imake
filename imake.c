@@ -298,11 +298,11 @@ void KludgeOutputLine(char **), KludgeResetRule(void);
 # endif
 #endif
 
-char *cpp = NULL;
+const char *cpp = NULL;
 
 char	*tmpMakefile = "/tmp/Imf.XXXXXX";
 char	*tmpImakefile = "/tmp/IIf.XXXXXX";
-char	*make_argv[ ARGUMENTS ] = {
+const char	*make_argv[ ARGUMENTS ] = {
 #ifdef WIN32
     "nmake"
 #else
@@ -312,53 +312,54 @@ char	*make_argv[ ARGUMENTS ] = {
 
 int	make_argindex;
 int	cpp_argindex;
-char	*Imakefile = NULL;
-char	*Makefile = "Makefile";
-char	*Template = "Imake.tmpl";
-char	*ImakefileC = "Imakefile.c";
+const char	*Imakefile = NULL;
+const char	*Makefile = "Makefile";
+const char	*Template = "Imake.tmpl";
+const char	*ImakefileC = "Imakefile.c";
 boolean haveImakefileC = FALSE;
-char	*cleanedImakefile = NULL;
-char	*program;
-char	*FindImakefile(char *Imakefile);
-char	*ReadLine(FILE *tmpfd, char *tmpfname);
-char	*CleanCppInput(char *imakefile);
-char	*Strdup(char *cp);
+const char	*cleanedImakefile = NULL;
+const char	*program;
+const char	*FindImakefile(const char *Imakefile);
+char	*ReadLine(FILE *tmpfd, const char *tmpfname);
+const char	*CleanCppInput(const char *imakefile);
+char	*Strdup(const char *cp);
 char	*Emalloc(int size);
-void	LogFatalI(char *s, int i), LogFatal(char *x0, char *x1),
-	LogMsg(char *x0, char *x1);
+void	LogFatalI(const char *s, int i);
+void	LogFatal(const char *x0, const char *x1);
+void	LogMsg(const char *x0, const char *x1);
 
 void	showit(FILE *fd);
 void	wrapup(void);
 void	init(void);
-void	AddMakeArg(char *arg);
-void	AddCppArg(char *arg);
+void	AddMakeArg(const char *arg);
+void	AddCppArg(const char *arg);
 #ifdef CROSSCOMPILE
 char	*CrossCompileCPP(void);
 #endif
 void	SetOpts(int argc, char **argv);
-void	CheckImakefileC(char *masterc);
-void	cppit(char *imakefile, char *template, char *masterc,
-	      FILE *outfd, char *outfname);
+void	CheckImakefileC(const char *masterc);
+void	cppit(const char *imakefile, const char *template, const char *masterc,
+	      FILE *outfd, const char *outfname);
 void	makeit(void);
-void	CleanCppOutput(FILE *tmpfd, char *tmpfname);
+void	CleanCppOutput(FILE *tmpfd, const char *tmpfname);
 boolean isempty(char *line);
-void	writetmpfile(FILE *fd, char *buf, int cnt, char *fname);
+void	writetmpfile(FILE *fd, const char *buf, int cnt, const char *fname);
 #ifdef SIGNALRETURNSINT
 int	catch(int sig);
 #else
 void	catch(int sig);
 #endif
-void	showargs(char **argv);
-boolean optional_include(FILE *inFile, char *defsym, char *fname);
-void	  doit(FILE *outfd, char *cmd, char **argv);
+void	showargs(const char **argv);
+boolean optional_include(FILE *inFile, const char *defsym, const char *fname);
+void	  doit(FILE *outfd, const char *cmd, const char **argv);
 boolean define_os_defaults(FILE *inFile);
 #ifdef CROSSCOMPILE
 static void get_cross_compile_dir(FILE *inFile);
 #endif
 #ifdef CROSSCOMPILEDIR
-char *CrossCompileDir = CROSSCOMPILEDIR;
+const char *CrossCompileDir = CROSSCOMPILEDIR;
 #else
-char *CrossCompileDir = "";
+const char *CrossCompileDir = "";
 #endif
 boolean CrossCompiling = FALSE;
 
@@ -539,7 +540,7 @@ init(void)
 }
 
 void
-AddMakeArg(char *arg)
+AddMakeArg(const char *arg)
 {
 	errno = 0;
 	if (make_argindex >= ARGUMENTS-1)
@@ -549,7 +550,7 @@ AddMakeArg(char *arg)
 }
 
 void
-AddCppArg(char *arg)
+AddCppArg(const char *arg)
 {
 	errno = 0;
 	if (cpp_argindex >= ARGUMENTS-1)
@@ -653,8 +654,8 @@ SetOpts(int argc, char **argv)
 	AddCppArg(ImakefileC);
 }
 
-char *
-FindImakefile(char *Imakefile)
+const char *
+FindImakefile(const char *Imakefile)
 {
 	if (Imakefile) {
 		if (access(Imakefile, R_OK) < 0)
@@ -672,14 +673,14 @@ FindImakefile(char *Imakefile)
 }
 
 void
-LogFatalI(char *s, int i)
+LogFatalI(const char *s, int i)
 {
 	/*NOSTRICT*/
 	LogFatal(s, (char *)(long)i);
 }
 
 void
-LogFatal(char *x0, char *x1)
+LogFatal(const char *x0, const char *x1)
 {
 	static boolean entered = FALSE;
 
@@ -694,7 +695,7 @@ LogFatal(char *x0, char *x1)
 }
 
 void
-LogMsg(char *x0, char *x1)
+LogMsg(const char *x0, const char *x1)
 {
 	int error_number = errno;
 
@@ -708,7 +709,7 @@ LogMsg(char *x0, char *x1)
 }
 
 void
-showargs(char **argv)
+showargs(const char **argv)
 {
 	for (; *argv; argv++)
 		fprintf(stderr, "%s ", *argv);
@@ -718,7 +719,7 @@ showargs(char **argv)
 #define ImakefileCHeader "/* imake - temporary file */"
 
 void
-CheckImakefileC(char *masterc)
+CheckImakefileC(const char *masterc)
 {
 	char mkcbuf[1024];
 	FILE *inFile;
@@ -745,7 +746,7 @@ CheckImakefileC(char *masterc)
 #define OverrideWarning "Warning: local file \"%s\" overrides global macros."
 
 boolean
-optional_include(FILE *inFile, char *defsym, char *fname)
+optional_include(FILE *inFile, const char *defsym, const char *fname)
 {
 	errno = 0;
 	if (access(fname, R_OK) == 0) {
@@ -757,7 +758,7 @@ optional_include(FILE *inFile, char *defsym, char *fname)
 }
 
 void
-doit(FILE *outfd, char *cmd, char **argv)
+doit(FILE *outfd, const char *cmd, const char **argv)
 {
 	int		pid;
 	waitType	status;
@@ -799,7 +800,7 @@ doit(FILE *outfd, char *cmd, char **argv)
 
 #if !defined WIN32
 static void
-parse_utsname(struct utsname *name, char *fmt, char *result, char *msg)
+parse_utsname(struct utsname *name, const char *fmt, char *result, const char *msg)
 {
   char buf[SYS_NMLN * 5 + 1];
   char *ptr = buf;
@@ -1035,9 +1036,9 @@ get_distrib(FILE *inFile)
 {
   struct stat sb;
 
-  static char* suse = "/etc/SuSE-release";
-  static char* redhat = "/etc/redhat-release";
-  static char* debian = "/etc/debian_version";
+  static const char*   suse = "/etc/SuSE-release";
+  static const char* redhat = "/etc/redhat-release";
+  static const char* debian = "/etc/debian_version";
 
   fprintf (inFile, "%s\n", "#define LinuxUnknown    0");
   fprintf (inFile, "%s\n", "#define LinuxSuSE       1");
@@ -1326,7 +1327,7 @@ static boolean
 get_gcc(char *cmd)
 {
   struct stat sb;
-    static char* gcc_path[] = {
+    static const char* gcc_path[] = {
 #if defined(linux) || \
      defined(__NetBSD__) || \
      defined(__OpenBSD__) || \
@@ -1345,7 +1346,7 @@ get_gcc(char *cmd)
     };
 
 #ifdef CROSSCOMPILE
-    static char* cross_cc_name[] = {
+    static const char* cross_cc_name[] = {
 	"cc",
 	"gcc"
     };
@@ -1679,8 +1680,8 @@ define_os_defaults(FILE *inFile)
 }
 
 void
-cppit(char *imakefile, char *template, char *masterc,
-      FILE *outfd, char *outfname)
+cppit(const char *imakefile, const char *template, const char *masterc,
+      FILE *outfd, const char *outfname)
 {
 	FILE	*inFile;
 
@@ -1713,8 +1714,8 @@ makeit(void)
 	doit(NULL, make_argv[0], make_argv);
 }
 
-char *
-CleanCppInput(char *imakefile)
+const char *
+CleanCppInput(const char *imakefile)
 {
 	FILE	*outFile = NULL;
 	FILE	*inFile;
@@ -1814,7 +1815,7 @@ CleanCppInput(char *imakefile)
 }
 
 void
-CleanCppOutput(FILE *tmpfd, char *tmpfname)
+CleanCppOutput(FILE *tmpfd, const char *tmpfname)
 {
 	char	*input;
 	int	blankline = 0;
@@ -1936,7 +1937,7 @@ isempty(char *line)
 
 /*ARGSUSED*/
 char *
-ReadLine(FILE *tmpfd, char *tmpfname)
+ReadLine(FILE *tmpfd, const char *tmpfname)
 {
 	static boolean	initialized = FALSE;
 	static char	*buf, *pline, *end;
@@ -2010,7 +2011,7 @@ ReadLine(FILE *tmpfd, char *tmpfname)
 }
 
 void
-writetmpfile(FILE *fd, char *buf, int cnt, char *fname)
+writetmpfile(FILE *fd, const char *buf, int cnt, const char *fname)
 {
 	if (fwrite(buf, sizeof(char), cnt, fd) == -1)
 		LogFatal("Cannot write to %s.", fname);
@@ -2133,7 +2134,7 @@ KludgeResetRule(void)
 }
 #endif
 char *
-Strdup(char *cp)
+Strdup(const char *cp)
 {
 	char *new = Emalloc(strlen(cp) + 1);
 
