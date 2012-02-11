@@ -47,8 +47,8 @@ the
 .I imake
 program is run with arguments appropriate for your system
 (configured into
-.I xmkmf
-when X was built) and generates a
+.I imake
+when it was built) and generates a
 .I Makefile.
 .PP
 When invoked with the
@@ -61,14 +61,13 @@ in the current directory, and then automatically executes
 ``make Makefiles'' (in case there are subdirectories),
 ``make includes'',
 and ``make depend'' for you.
-This is the normal way to configure software that is outside
-the X Consortium build tree.
 .PP
-If working inside the X Consortium build tree (unlikely unless you
-are an X developer, and even then this option is never really used), the
+If a
 .I topdir
-argument should be specified as the relative pathname from the
-current directory to the top of the build tree.  Optionally,
+is given,
+.I xmkmf
+assumes nothing is installed on your system and looks for files in
+the build tree instead of using the installed versions.  Optionally,
 .I curdir
 may be specified as a relative pathname from the top of the build
 tree to the current directory.  It is necessary to supply
@@ -76,11 +75,5 @@ tree to the current directory.  It is necessary to supply
 if the current directory has subdirectories, or the
 .I Makefile
 will not be able to build the subdirectories.
-If a
-.I topdir
-is given,
-.I xmkmf
-assumes nothing is installed on your system and looks for files in
-the build tree instead of using the installed versions.
 .SH "SEE ALSO"
 imake(1)
