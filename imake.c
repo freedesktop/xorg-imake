@@ -745,7 +745,8 @@ CheckImakefileC(const char *masterc)
 			fclose(inFile);
 			LogFatal("Refuse to overwrite: %s", masterc);
 		}
-		fclose(inFile);
+		else
+			fclose(inFile);
 	}
 }
 
