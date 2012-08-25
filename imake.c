@@ -1709,8 +1709,11 @@ cppit(const char *imakefile, const char *template, const char *masterc,
 	    fprintf(inFile, IncludeFmt, ImakeTmplSym) < 0 ||
 	    optional_include(inFile, "IMAKE_ADMIN_MACROS", "adminmacros") ||
 	    optional_include(inFile, "IMAKE_LOCAL_MACROS", "localmacros") ||
-	    fflush(inFile) ||
-	    fclose(inFile))
+	    fflush(inFile)) {
+		fclose(inFile);
+		LogFatal("Cannot write to %s.", masterc);
+	}
+	else if (fclose(inFile))
 		LogFatal("Cannot write to %s.", masterc);
 	/*
 	 * Fork and exec cpp
