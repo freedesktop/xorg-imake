@@ -294,9 +294,6 @@ in this Software without prior written authorization from The Open Group.
 #   if defined(_IBMR2) && !defined(DEFAULT_CPP)
 #    define DEFAULT_CPP "/usr/ccs/lib/cpp"
 #   endif
-#   if defined(sun) && (defined(SVR4) || defined(__svr4__) || defined(__SVR4) || defined(__sol__))
-#    define DEFAULT_CPP "/usr/ccs/lib/cpp"
-#   endif
 #   ifdef __bsdi__
 #    define DEFAULT_CPP "/usr/bin/cpp"
 #   endif
