@@ -1387,7 +1387,7 @@ get_gcc(char *cmd)
     return FALSE;
 }
 
-#if defined CROSSCOMPILE || !defined __UNIXOS2__
+#ifdef CROSSCOMPILE
 static void
 get_gcc_incdir(FILE *inFile, char* name)
 {
@@ -1416,7 +1416,7 @@ get_gcc_incdir(FILE *inFile, char* name)
 boolean
 define_os_defaults(FILE *inFile)
 {
-#if defined CROSSCOMPILE || ( !defined(WIN32) && !defined(__UNIXOS2__) )
+#if defined CROSSCOMPILE || !defined(WIN32)
 # ifdef CROSSCOMPILE
 #  ifdef __GNUC__
   if (1)
@@ -1636,10 +1636,8 @@ define_os_defaults(FILE *inFile)
 	  char name[PATH_MAX];
 	  if (get_gcc(name)) {
 	      get_gcc_version (inFile,name);
-#  if defined CROSSCOMPILE || !defined __UNIXOS2__
-#   if defined CROSSCOMPILE
+#  if defined CROSSCOMPILE
 	      if (sys != emx)
-#   endif
 		  get_gcc_incdir(inFile,name);
 #  endif
 	  }
@@ -1652,7 +1650,7 @@ define_os_defaults(FILE *inFile)
 	  get_binary_format(inFile);
 # endif
     }
-#endif /* !WIN32 && !__UNIXOS2__*/
+#endif /* !WIN32 */
 #if defined WIN32
 # ifdef CROSSCOMPILE
   else if (sys == win32 && !CrossCompiling)
@@ -1676,8 +1674,6 @@ define_os_defaults(FILE *inFile)
 #endif /* WIN32 */
 #ifdef CROSSCOMPILE
   else if (sys == emx)
-#endif
-#if defined CROSSCOMPILE || defined __UNIXOS2__
     {
       fprintf(inFile, "#define DefaultOSMajorVersion 4\n");
       fprintf(inFile, "#define DefaultOSMinorVersion 0\n");
